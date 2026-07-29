@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <!-- Premium Neon Green Gradient -->
+    <linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C8FF4D" />
+      <stop offset="100%" stop-color="#9DE500" />
+    </linearGradient>
+    <!-- Dark Shadow Glow -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Ring (Glassmorphic Outer Frame) -->
+  <circle cx="50" cy="50" r="46" fill="none" stroke="url(#neonGlow)" stroke-width="2" stroke-opacity="0.2" />
+  
+  <!-- Headphones Arch (Outer Band) -->
+  <path d="M 22,50 A 28,28 0 0,1 78,50" fill="none" stroke="url(#neonGlow)" stroke-width="5" stroke-linecap="round" filter="url(#glow)" />
+
+  <!-- Dynamic Soundwave Channels (The "K" and "R" representation) -->
+  <!-- Left Side: K Shape Bars -->
+  <g transform="translate(10, 0)">
+    <!-- Main stem -->
+    <rect x="22" y="36" width="5" height="28" rx="2.5" fill="url(#neonGlow)" />
+    <!-- Upper leg -->
+    <rect x="27" y="44" width="5" height="15" rx="2.5" transform="rotate(-45 27 44)" fill="url(#neonGlow)" />
+    <!-- Lower leg -->
+    <rect x="25" y="52" width="5" height="16" rx="2.5" transform="rotate(45 25 52)" fill="url(#neonGlow)" />
+  </g>
+
+  <!-- Right Side: R Shape Loop & Leg -->
+  <g transform="translate(10, 0)">
+    <!-- Main stem -->
+    <rect x="46" y="36" width="5" height="28" rx="2.5" fill="url(#neonGlow)" />
+    <!-- R Loop -->
+    <path d="M 50,36 H 57 A 6,6 0 0,1 63,42 V 44 A 6,6 0 0,1 57,50 H 50" fill="none" stroke="url(#neonGlow)" stroke-width="5" stroke-linecap="round" />
+    <!-- R Leg -->
+    <rect x="55" y="49" width="5" height="16" rx="2.5" transform="rotate(35 55 49)" fill="url(#neonGlow)" />
+  </g>
+
+  <!-- Music EQ Visualizer Bars (Bottom Center) -->
+  <rect x="34" y="72" width="3" height="10" rx="1.5" fill="#FFFFFF" opacity="0.8" />
+  <rect x="42" y="68" width="3" height="14" rx="1.5" fill="url(#neonGlow)" />
+  <rect x="50" y="66" width="3" height="16" rx="1.5" fill="url(#neonGlow)" />
+  <rect x="58" y="70" width="3" height="12" rx="1.5" fill="url(#neonGlow)" />
+  <rect x="66" y="73" width="3" height="8" rx="1.5" fill="#FFFFFF" opacity="0.8" />
+</svg>

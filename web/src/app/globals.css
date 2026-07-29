@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --theme-glow-color: 29, 185, 84; /* Spotify green default */
+  --theme-glow-bg-color: rgba(var(--theme-glow-color), 0.12);
+}
+
+body {
+  background-color: #0b0b0b;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Custom Scrollbar Styles to mimic Spotify's subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Premium Card Styles with interactive lighting borders */
+.premium-card {
+  background: rgba(20, 20, 20, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.premium-card:hover {
+  background: rgba(36, 36, 36, 0.8);
+  border-color: rgba(var(--theme-glow-color), 0.3);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.6),
+    0 0 15px rgba(var(--theme-glow-color), 0.15);
+}
+
+/* Apple Glassmorphism Design System */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.apple-glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-glass-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(var(--theme-glow-color), 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+
+/* Nav Item Styling */
+.ios-nav-item {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.ios-nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ios-nav-item.active {
+  background: rgba(var(--theme-glow-color), 0.08);
+  border-color: rgba(var(--theme-glow-color), 0.2);
+  box-shadow:
+    0 0 0 1px rgba(var(--theme-glow-color), 0.05) inset,
+    0 0 16px rgba(var(--theme-glow-color), 0.05);
+}
+
+/* Skeleton Loading Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #141414 25%, #222222 50%, #141414 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Heart Pop Micro-animation */
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.heart-pulse {
+  animation: heartPulse 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Smooth Rotation for CDs */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Micro-interaction Scale Down on Click */
+.btn-interactive:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+.btn-interactive:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Pure CSS jumping equalizer visualizer */
+.mini-equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 14px;
+}
+
+.mini-equalizer-bar {
+  width: 2px;
+  height: 100%;
+  background-color: rgba(var(--theme-glow-color), 1);
+  border-radius: 1px;
+  animation: bounceEqualizer 0.8s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+
+.mini-equalizer-bar:nth-child(1) { animation-delay: 0.15s; animation-duration: 0.75s; }
+.mini-equalizer-bar:nth-child(2) { animation-delay: 0.3s; animation-duration: 1.05s; }
+.mini-equalizer-bar:nth-child(3) { animation-delay: 0.0s; animation-duration: 0.9s; }
+.mini-equalizer-bar:nth-child(4) { animation-delay: 0.45s; animation-duration: 1.15s; }
+
+@keyframes bounceEqualizer {
+  0% { transform: scaleY(0.15); }
+  100% { transform: scaleY(1); }
+}
+
+/* Styled Range Sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.12);
+  height: 4px;
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+
+input[type="range"]:hover::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #FFFFFF;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  margin-top: -4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  opacity: 1;
+  background: rgba(var(--theme-glow-color), 1);
+}
+
+/* Custom CSS Scrollbar hides */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

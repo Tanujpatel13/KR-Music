@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Next.js build
+.next/
+**/.next/
+
+# Next.js export
+out/
+**/out/
+
+# Backend build
+dist/
+**/dist/
+
+# Environment
+.env
+**/.env
+
+# Media
+Songs/
+images/
+
+# Logs
+*.log
+
+# Netlify
+.netlify/
+
+.env.local
+**/.env.local
+
+backend/public/audio/
+web/public/static/audio/
+
+*.mp3
