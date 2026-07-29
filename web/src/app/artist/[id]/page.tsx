@@ -264,7 +264,7 @@ export default function ArtistPage() {
                       <p className={`font-semibold text-sm truncate ${isPlayingThis ? 'text-spotifyGreen' : 'text-brandWhite'}`}>
                         {song.name}
                       </p>
-                      <p className="text-xs text-brandMuted truncate mt-0.5">{typeof song.album === 'object' && song.album !== null ? song.album.name : song.album || ''}</p>
+                      <p className="text-xs text-brandMuted truncate mt-0.5">{typeof song.album === 'string' ? song.album : (song.album as any)?.name || ''}</p>
                     </div>
                   </div>
 

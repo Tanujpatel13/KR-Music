@@ -664,7 +664,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="hidden md:flex items-center flex-1 text-sm text-brandMuted truncate" onClick={() => handlePlaySong(song)}>
-                    {typeof song.album === 'object' && song.album !== null ? song.album.name : song.album || 'Single'}
+                    {typeof song.album === 'string' ? song.album : (song.album as any)?.name || 'Single'}
                   </div>
 
                   <div className="flex items-center gap-4 flex-shrink-0">

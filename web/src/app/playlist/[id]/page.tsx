@@ -347,7 +347,7 @@ export default function PlaylistDetailsPage() {
                         className="p-4 text-brandMuted hidden md:table-cell truncate"
                         onClick={() => handlePlaySong(song)}
                       >
-                        {typeof song.album === 'object' && song.album !== null ? song.album.name : song.album || 'Single'}
+                        {typeof song.album === 'string' ? song.album : (song.album as any)?.name || 'Single'}
                       </td>
 
                       {/* Delete Track Button */}
@@ -434,7 +434,7 @@ export default function PlaylistDetailsPage() {
                       <p className="font-semibold text-sm truncate text-brandWhite group-hover:text-spotifyGreen transition-colors">
                         {song.name}
                       </p>
-                      <p className="text-xs text-brandMuted truncate">{typeof song.artist === 'object' ? song.artist?.name : song.artist} &bull; {typeof song.album === 'object' && song.album !== null ? song.album.name : song.album || ''}</p>
+                      <p className="text-xs text-brandMuted truncate">{typeof song.artist === 'object' ? song.artist?.name : song.artist} &bull; {typeof song.album === 'string' ? song.album : (song.album as any)?.name || ''}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 flex-shrink-0">
