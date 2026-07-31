@@ -10,7 +10,7 @@ import { setSidebarOpen } from '../store/playerSlice';
 export default function Sidebar() {
   const dispatch = useDispatch();
   const player = useSelector((state: RootState) => state.player);
-  const { isSidebarOpen } = player;
+  const { isSidebarOpen, currentSong } = player;
   const pathname = usePathname();
 
   const handleInstall = (e: React.MouseEvent) => {
@@ -29,12 +29,13 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className={`fixed top-0 bottom-24 left-0 w-64 bg-black border-r border-brandElevated z-50 flex flex-col justify-between transition-transform duration-300 ease-in-out transform-gpu ${
-      isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-    } p-2 text-brandWhite select-none`} style={{ willChange: 'transform' }}>
-      
-      {/* Top Navigation Section */}
-      <div className="bg-[#121212] rounded-xl p-5 space-y-6 flex-shrink-0">
+    <aside
+      className={`fixed top-0 ${currentSong ? 'bottom-20' : 'bottom-0'} left-0 w-64 bg-[#121212] border-r border-white/10 z-45 flex flex-col justify-between transition-all duration-300 ease-in-out p-5 text-brandWhite select-none ${
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
+    >
+      {/* Top Section */}
+      <div className="space-y-6">
         {/* Brand Logo & Collapse Button */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -54,13 +55,13 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Top Links: Home & Your Library */}
-        <nav className="flex flex-col gap-4">
+        {/* Top Navigation Links: Home & Your Library */}
+        <nav className="flex flex-col gap-3 pt-2">
           <Link
             href="/"
             onClick={() => { if (window.innerWidth < 768) dispatch(setSidebarOpen(false)); }}
-            className={`flex items-center gap-4 text-sm font-bold transition-all duration-200 ${
-              pathname === '/' ? 'text-spotifyGreen' : 'text-brandMuted hover:text-brandWhite'
+            className={`flex items-center gap-4 text-sm font-bold transition-all duration-200 p-2.5 rounded-xl ${
+              pathname === '/' ? 'bg-[#282828] text-spotifyGreen' : 'text-brandMuted hover:bg-[#1a1a1a] hover:text-brandWhite'
             }`}
           >
             <Home className="w-5 h-5" />
@@ -70,8 +71,8 @@ export default function Sidebar() {
           <Link
             href="/library"
             onClick={() => { if (window.innerWidth < 768) dispatch(setSidebarOpen(false)); }}
-            className={`flex items-center gap-4 text-sm font-bold transition-all duration-200 ${
-              pathname === '/library' ? 'text-spotifyGreen' : 'text-brandMuted hover:text-brandWhite'
+            className={`flex items-center gap-4 text-sm font-bold transition-all duration-200 p-2.5 rounded-xl ${
+              pathname === '/library' ? 'bg-[#282828] text-spotifyGreen' : 'text-brandMuted hover:bg-[#1a1a1a] hover:text-brandWhite'
             }`}
           >
             <Library className="w-5 h-5" />
@@ -80,13 +81,13 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* Bottom Navigation Section: User Profile & Log Out */}
-      <div className="bg-[#121212] rounded-xl p-4 flex flex-col gap-2 flex-shrink-0">
+      {/* Bottom Section: User Profile & Log Out */}
+      <div className="flex flex-col gap-2 pt-4 border-t border-white/10">
         <Link
           href="/profile"
           onClick={() => { if (window.innerWidth < 768) dispatch(setSidebarOpen(false)); }}
-          className={`flex items-center gap-4 p-2.5 rounded-lg text-sm font-bold transition-colors ${
-            pathname === '/profile' ? 'bg-[#282828] text-spotifyGreen' : 'text-brandMuted hover:bg-[#1a1a1a]/50 hover:text-brandWhite'
+          className={`flex items-center gap-4 p-2.5 rounded-xl text-sm font-bold transition-colors ${
+            pathname === '/profile' ? 'bg-[#282828] text-spotifyGreen' : 'text-brandMuted hover:bg-[#1a1a1a] hover:text-brandWhite'
           }`}
         >
           <User className="w-5 h-5" />
@@ -95,7 +96,7 @@ export default function Sidebar() {
         
         <button
           onClick={handleInstall}
-          className="sm:hidden flex items-center gap-4 p-2.5 rounded-lg text-sm font-bold text-spotifyGreen hover:bg-[#1a1a1a]/50 w-full text-left"
+          className="sm:hidden flex items-center gap-4 p-2.5 rounded-xl text-sm font-bold text-spotifyGreen hover:bg-[#1a1a1a] w-full text-left"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
           <span>Download App</span>
@@ -108,7 +109,7 @@ export default function Sidebar() {
               window.location.href = '/login';
             }
           }}
-          className="flex items-center gap-4 p-2.5 rounded-lg text-sm font-bold text-red-500 hover:bg-red-500/10 hover:text-red-400 w-full text-left transition-colors"
+          className="flex items-center gap-4 p-2.5 rounded-xl text-sm font-bold text-red-500 hover:bg-red-500/10 hover:text-red-400 w-full text-left transition-colors"
         >
           <LogOut className="w-5 h-5 text-red-500" />
           <span>Log Out</span>

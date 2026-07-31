@@ -199,7 +199,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </main>
       ) : (
         <>
-          <div className="flex flex-1 h-[calc(100vh-6rem)] md:h-[calc(100vh-6rem)] overflow-hidden relative">
+          <div className="flex flex-1 h-screen w-full overflow-hidden relative">
             {/* Sidebar Left Pane (slides out from the left) */}
             <Sidebar />
 
@@ -230,7 +230,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
             {/* Content Display Area with Apple Ambient Mesh Lighting */}
             <main 
-              className={`flex-1 overflow-y-auto bg-[#09090b] relative flex flex-col transition-[margin] duration-500 ease-in-out transform-gpu ${isSidebarOpen ? 'md:ml-64' : 'ml-0'} ${currentSong ? 'pb-36 md:pb-0' : 'pb-20 md:pb-0'}`}
+              className={`flex-1 overflow-y-auto bg-[#09090b] relative flex flex-col transition-[margin] duration-300 ease-in-out transform-gpu ${isSidebarOpen ? 'md:ml-64' : 'ml-0'} pb-28`}
               style={{ willChange: 'margin' }}
             >
               {/* Apple Ambient Frosted Glow Mesh */}
