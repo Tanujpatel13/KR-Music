@@ -7,6 +7,7 @@ import { setSong, setQueue, togglePlay, toggleLikeSong, setActiveAlbum, setHisto
 import { useState, useEffect } from 'react';
 import { MOCK_TRACKS } from '../lib/mockTracks';
 import { MOCK_ALBUMS } from '../lib/mockAlbums';
+import { MOCK_PLAYLISTS } from '../lib/mockPlaylists';
 import Link from 'next/link';
 import { usePublicPlaylists } from '../hooks/usePublicPlaylists';
 
@@ -59,6 +60,13 @@ export default function HomePage() {
       setPlaylistsLoading(false);
     }
   }, [hookPlaylists]);
+
+  // Static mock playlists as final fallback (offline / no backend)
+  useEffect(() => {
+    if (!playlistsLoading && publicPlaylists.length === 0) {
+      setPublicPlaylists(MOCK_PLAYLISTS as any);
+    }
+  }, [playlistsLoading, publicPlaylists.length]);
 
   // Country detection + home feed + customPlaylists listener
   useEffect(() => {

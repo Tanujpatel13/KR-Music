@@ -8,6 +8,7 @@ import { RootState } from '../../../store/store';
 import { setSong, setQueue, togglePlay } from '../../../store/playerSlice';
 import Link from 'next/link';
 import { MOCK_TRACKS } from '../../../lib/mockTracks';
+import { MOCK_PLAYLISTS } from '../../../lib/mockPlaylists';
 
 export default function PlaylistDetailsPage() {
   const params = useParams();
@@ -48,9 +49,16 @@ export default function PlaylistDetailsPage() {
             songs: data.songs
           };
           setPlaylist(formatted);
+          return;
         }
       } catch (err) {
         console.warn('Failed to fetch playlist from backend:', err);
+      }
+
+      // Final fallback: check MOCK_PLAYLISTS (Local, Telugu, Hindi, English)
+      const mockFound = MOCK_PLAYLISTS.find((pl) => pl.id === String(playlistId));
+      if (mockFound) {
+        setPlaylist(mockFound);
       }
     }
   };
