@@ -29,8 +29,15 @@ export default function ProfilePage() {
     likedCount: 0,
   });
 
+  const [isPremium, setIsPremium] = useState(true);
+
   const loadProfile = () => {
     if (typeof window !== 'undefined') {
+      const savedPremium = localStorage.getItem('is_premium_user');
+      if (savedPremium !== null) {
+        setIsPremium(savedPremium === 'true');
+      }
+
       const savedProfile = localStorage.getItem('user_profile_data');
       if (savedProfile) {
         const parsed = JSON.parse(savedProfile);
@@ -93,7 +100,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="p-8 pb-32 space-y-10 text-brandWhite select-none animate-fade-in relative min-h-full">
+    <div className="p-8 pb-32 space-y-8 text-brandWhite select-none animate-fade-in relative min-h-full">
       
       {/* Back to Home Navigation */}
       <Link
@@ -126,9 +133,18 @@ export default function ProfilePage() {
 
         {/* Profile Meta Details */}
         <div className="space-y-4 z-10 flex-grow text-center md:text-left">
-          <span className="text-[10px] uppercase tracking-widest font-extrabold text-spotifyGreen bg-spotifyGreen/10 px-3 py-1 rounded-full border border-spotifyGreen/20">
-            Profile Account
-          </span>
+          <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
+            <span className="text-[10px] uppercase tracking-widest font-extrabold text-white bg-white/10 px-3 py-1 rounded-full border border-white/20">
+              Profile Account
+            </span>
+            <span className={`text-[10px] uppercase tracking-widest font-extrabold px-3 py-1 rounded-full border ${
+              isPremium 
+                ? 'bg-spotifyGreen/15 text-spotifyGreen border-spotifyGreen/30' 
+                : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+            }`}>
+              {isPremium ? '★ Premium Member' : 'Free Tier'}
+            </span>
+          </div>
           
           <div className="space-y-1.5">
             <h1 className="text-3xl md:text-5xl font-black tracking-tight">{username}</h1>
@@ -147,6 +163,29 @@ export default function ProfilePage() {
             Edit Profile
           </button>
         </div>
+      </div>
+
+      {/* Subscription Status Card */}
+      <div className="bg-[#181818] border border-white/5 p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div className="flex items-center gap-4">
+          <div className={`p-3 rounded-xl ${isPremium ? 'bg-spotifyGreen/20 text-spotifyGreen' : 'bg-amber-500/20 text-amber-400'}`}>
+            <Award className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="font-extrabold text-sm text-white">Subscription Plan: <span className={isPremium ? 'text-spotifyGreen' : 'text-amber-400'}>{isPremium ? 'KR Music Premium Active' : 'Free Account'}</span></h3>
+            <p className="text-xs text-brandMuted mt-0.5">{isPremium ? 'You have active Premium access with high-fidelity audio streams and offline downloads.' : 'Free tier account.'}</p>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            const nextState = !isPremium;
+            setIsPremium(nextState);
+            localStorage.setItem('is_premium_user', String(nextState));
+          }}
+          className="px-4 py-2 text-xs font-bold rounded-full border border-white/10 hover:bg-white/10 transition-all text-white flex-shrink-0"
+        >
+          {isPremium ? 'Switch to Free' : 'Upgrade to Premium'}
+        </button>
       </div>
 
       {/* 2. User Stats blocks */}

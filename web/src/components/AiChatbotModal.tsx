@@ -309,14 +309,13 @@ export default function AiChatbotModal() {
     }
   }, [messages, isOpen]);
 
-  // Comprehensive song search engine across all 120+ project tracks + Online Full MP3 APIs
+  // Search engine across local downloaded tracks
   const searchSongsOnlineOrLocal = async (query: string): Promise<any[]> => {
     const rawQuery = query.toLowerCase();
     const cleanQuery = query.toLowerCase().replace(/play|search|lyrics|song|for|by|artist/gi, '').trim();
 
-    // 0. Check Devotional Intent (Venkateshwara Swami, Suprabhatam, Govinda, Annamayya, Shiva, Stotram)
+    // Devotional Intent
     const devotionalKeywords = ['venkateshwara', 'venkateswara', 'swami', 'govinda', 'tirumala', 'suprabhatam', 'annamayya', 'balaji', 'srinivasa', 'shiva', 'devotional', 'bhakti', 'god', 'sloka', 'stotram'];
-
     const isDevotionalSearch = devotionalKeywords.some(k => rawQuery.includes(k) || cleanQuery.includes(k));
 
     if (isDevotionalSearch) {
@@ -324,153 +323,51 @@ export default function AiChatbotModal() {
         s.keywords.some(k => rawQuery.includes(k) || cleanQuery.includes(k)) ||
         s.name.toLowerCase().includes(cleanQuery)
       );
-
-      if (matchedDevotional.length > 0) {
-        return matchedDevotional;
-      }
-      return DEVOTIONAL_CATALOG;
+      return matchedDevotional.length > 0 ? matchedDevotional : DEVOTIONAL_CATALOG;
     }
 
-    if (!cleanQuery) return MOCK_TRACKS.slice(0, 5);
-
-    // 1. Search all project tracks (MOCK_TRACKS + LOCAL_CATALOG + DEVOTIONAL_CATALOG)
     const allProjectTracks = [...DEVOTIONAL_CATALOG, ...MOCK_TRACKS, ...LOCAL_CATALOG];
     const matchedTrackIds = new Set<string>();
 
+    if (cleanQuery) {
+      const localMatches = allProjectTracks.filter((s: any) => {
+        if (matchedTrackIds.has(s.id)) return false;
 
-    const localMatches = allProjectTracks.filter((s: any) => {
-      if (matchedTrackIds.has(s.id)) return false;
+        const nameMatch = s.name.toLowerCase().includes(cleanQuery);
+        const artistMatch = (typeof s.artist === 'string' ? s.artist : s.artist?.name || '').toLowerCase().includes(cleanQuery);
+        const albumMatch = (typeof s.album === 'string' ? s.album : s.album?.name || '').toLowerCase().includes(cleanQuery);
+        const genreMatch = (s.genre || '').toLowerCase().includes(cleanQuery);
 
-      const nameMatch = s.name.toLowerCase().includes(cleanQuery);
-      const artistMatch = (typeof s.artist === 'string' ? s.artist : s.artist?.name || '').toLowerCase().includes(cleanQuery);
-      const albumMatch = (typeof s.album === 'string' ? s.album : s.album?.name || '').toLowerCase().includes(cleanQuery);
-      const genreMatch = (s.genre || '').toLowerCase().includes(cleanQuery);
-
-      if (nameMatch || artistMatch || albumMatch || genreMatch) {
-        matchedTrackIds.add(s.id);
-        return true;
-      }
-      return false;
-    });
-
-    if (localMatches.length > 0) {
-      return localMatches.map((t: any) => ({
-        id: t.id,
-        name: t.name,
-        artist: typeof t.artist === 'string' ? { id: 'a5', name: t.artist } : t.artist || { id: 'a5', name: 'KR Artist' },
-        album: typeof t.album === 'string' ? { id: `alb-${t.id}`, name: t.album } : t.album || { id: `alb-${t.id}`, name: 'KR Album' },
-        duration: t.duration || 220,
-        coverImage: t.coverImage || '/static/images/kesariya.jpg',
-        audioUrl: t.audioUrl || `/static/audio/${t.id}.mp3`,
-      }));
-    }
-
-
-    // 2. Query JioSaavn 320kbps Music API for exact, accurate full-length MP3 streams worldwide
-    try {
-      const saavnUrl = `https://saavn.dev/api/search/songs?query=${encodeURIComponent(cleanQuery || query)}&limit=6`;
-      const res = await fetch(saavnUrl);
-      if (res.ok) {
-        const data = await res.json();
-        const results = data.data?.results || data.results || data.data;
-        if (results && Array.isArray(results) && results.length > 0) {
-          const saavnSongs = results.map((item: any) => {
-            let audioUrl = '';
-            if (item.downloadUrl && Array.isArray(item.downloadUrl) && item.downloadUrl.length > 0) {
-              const highestQuality = item.downloadUrl[item.downloadUrl.length - 1] || item.downloadUrl[0];
-              audioUrl = highestQuality.url || highestQuality.link || '';
-            } else if (item.media_url || item.url) {
-              audioUrl = item.media_url || item.url;
-            }
-
-            let coverImage = '/static/images/kesariya.jpg';
-            if (item.image && Array.isArray(item.image) && item.image.length > 0) {
-              const highRes = item.image[item.image.length - 1];
-              coverImage = highRes.url || highRes.link || coverImage;
-            } else if (typeof item.image === 'string') {
-              coverImage = item.image;
-            }
-
-            let artistName = 'Popular Artist';
-            if (item.primaryArtists) {
-              artistName = item.primaryArtists;
-            } else if (item.artists?.primary && Array.isArray(item.artists.primary) && item.artists.primary.length > 0) {
-              artistName = item.artists.primary.map((a: any) => a.name).join(', ');
-            } else if (item.artist) {
-              artistName = typeof item.artist === 'string' ? item.artist : item.artist.name || 'Popular Artist';
-            }
-
-            return {
-              id: `saavn-${item.id || Date.now()}`,
-              name: item.name || item.title || cleanQuery,
-              artist: { id: `art-${item.id || 'saavn'}`, name: artistName },
-              album: { id: `alb-saavn`, name: item.album?.name || 'Online Music Stream' },
-              duration: Number(item.duration) || 240,
-              coverImage,
-              audioUrl,
-            };
-          }).filter((t: any) => t.audioUrl && t.audioUrl.startsWith('http'));
-
-          if (saavnSongs.length > 0) {
-            return saavnSongs;
-          }
+        if (nameMatch || artistMatch || albumMatch || genreMatch) {
+          matchedTrackIds.add(s.id);
+          return true;
         }
+        return false;
+      });
+
+      if (localMatches.length > 0) {
+        return localMatches.map((t: any) => ({
+          id: t.id,
+          name: t.name,
+          artist: typeof t.artist === 'string' ? { id: 'a5', name: t.artist } : t.artist || { id: 'a5', name: 'KR Artist' },
+          album: typeof t.album === 'string' ? { id: `alb-${t.id}`, name: t.album } : t.album || { id: `alb-${t.id}`, name: 'KR Album' },
+          duration: t.duration || 220,
+          coverImage: t.coverImage || '/static/images/kesariya.jpg',
+          audioUrl: t.audioUrl || `/static/audio/${t.id}.mp3`,
+        }));
       }
-    } catch (e) {
-      console.warn('[Saavn Online Music Fetch Notice]:', e);
     }
 
-    // 3. Query Jamendo API for 100% Full-Length MP3 streams fallback
-
-    try {
-      const jamendoUrl = `https://api.jamendo.com/v3.0/tracks/?client_id=56d30c55&format=json&audioformat=mp32&limit=6&namesearch=${encodeURIComponent(
-        cleanQuery || query
-      )}`;
-      const res = await fetch(jamendoUrl);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.results && data.results.length > 0) {
-          return data.results.map((item: any) => ({
-            id: `jamendo-${item.id}`,
-            name: item.name,
-            artist: { id: `art-${item.artist_id}`, name: item.artist_name },
-            album: { id: `alb-${item.album_id}`, name: item.album_name || 'Jamendo Hits' },
-            duration: item.duration || 210,
-            coverImage: item.image || item.album_image || '/static/images/kesariya.jpg',
-            audioUrl: item.audio, // Full-length 320kbps MP3 audio stream!
-          }));
-        }
-      }
-    } catch (e) {
-      console.warn('[AI Search] Jamendo fetch fallback notice:', e);
-    }
-
-    // 3. Query Audius API for full-length tracks
-    try {
-      const audiusUrl = `https://discoveryprovider.audius.co/v1/tracks/search?query=${encodeURIComponent(
-        cleanQuery || query
-      )}`;
-      const res = await fetch(audiusUrl);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.data && data.data.length > 0) {
-          return data.data.slice(0, 6).map((item: any) => ({
-            id: `audius-${item.id}`,
-            name: item.title,
-            artist: { id: `art-${item.user.id}`, name: item.user.name },
-            album: { id: `alb-audius`, name: 'Audius Collection' },
-            duration: item.duration || 220,
-            coverImage: item.artwork?.['480x480'] || item.artwork?.['150x150'] || '/static/images/kesariya.jpg',
-            audioUrl: `https://discoveryprovider.audius.co/v1/tracks/${item.id}/stream`, // Full-length MP3 stream!
-          }));
-        }
-      }
-    } catch (e) {
-      console.warn('[AI Search] Audius fetch fallback notice:', e);
-    }
-
-    // Fallback to top full-length local songs
-    return LOCAL_CATALOG.slice(0, 4);
+    // Fallback: return top local tracks (never unverified webservers)
+    return LOCAL_CATALOG.slice(0, 5).map((t: any) => ({
+      id: t.id,
+      name: t.name,
+      artist: typeof t.artist === 'string' ? { id: 'a5', name: t.artist } : t.artist || { id: 'a5', name: 'KR Artist' },
+      album: typeof t.album === 'string' ? { id: `alb-${t.id}`, name: t.album } : t.album || { id: `alb-${t.id}`, name: 'KR Album' },
+      duration: t.duration || 220,
+      coverImage: t.coverImage || '/static/images/kesariya.jpg',
+      audioUrl: t.audioUrl || `/static/audio/${t.id}.mp3`,
+    }));
   };
 
 

@@ -339,6 +339,20 @@ export default function HomePage() {
     }
   };
 
+  const [username, setUsername] = useState('tanujpatel622');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedProfile = localStorage.getItem('user_profile_data');
+      if (savedProfile) {
+        try {
+          const parsed = JSON.parse(savedProfile);
+          if (parsed.username) setUsername(parsed.username);
+        } catch (e) {}
+      }
+    }
+  }, []);
+
   return (
     <div className="p-8 pb-32 space-y-10 select-none text-brandWhite">
       {/* 1. Dynamic Header Welcome Banner */}
@@ -348,18 +362,16 @@ export default function HomePage() {
         <div className="absolute top-[-50%] left-[-20%] w-[80%] h-[200%] rounded-full bg-[radial-gradient(circle,_rgba(29,185,84,0.12)_0%,_transparent_60%)] filter blur-2xl pointer-events-none animate-pulse" />
         <div className="absolute bottom-[-50%] right-[-10%] w-[60%] h-[180%] rounded-full bg-[radial-gradient(circle,_rgba(var(--theme-glow-color),0.08)_0%,_transparent_65%)] filter blur-2xl pointer-events-none" />
         
-        <div className="space-y-3 relative z-10">
+        <div className="space-y-4 relative z-10">
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-spotifyGreen/15 text-spotifyGreen border border-spotifyGreen/20">
               Premium Account
             </span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white leading-tight">
-            {greeting}, <span className="text-transparent bg-clip-text bg-gradient-to-r from-spotifyGreen to-[#1ED760]">KR Listener</span>
+            Hello <span className="text-transparent bg-clip-text bg-gradient-to-r from-spotifyGreen to-[#1ED760]">{username}</span>
           </h1>
-          <p className="text-brandMuted text-sm max-w-lg leading-relaxed">
-            Start streaming your high-fidelity music catalogue. Indulge in curated regional cinematic albums, lofi study mixes, and lossless audio streams.
-          </p>
+          
           <div className="pt-2 flex gap-3">
             <button 
               onClick={() => {
@@ -386,27 +398,6 @@ export default function HomePage() {
           <Sparkles className="w-48 h-48" />
         </div>
       </header>
-
-      {/* Geolocation Country-Based Tabs */}
-      <div className="flex gap-4 border-b border-white/5 pb-2">
-        {[
-          { id: 'local', label: 'Local Music' },
-          { id: 'international', label: 'International Music' },
-          { id: 'movie', label: 'Movie Soundtracks' }
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => handleTabChange(tab.id)}
-            className={`pb-2 text-sm font-black transition-all border-b-2 hover:text-[#FFFFFF] active:scale-95 ${
-              activeTab === tab.id
-                ? 'text-spotifyGreen border-spotifyGreen'
-                : 'text-brandMuted border-transparent'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
 
       {isLoading ? (
         <div className="space-y-10">

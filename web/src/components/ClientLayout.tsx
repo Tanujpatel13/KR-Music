@@ -251,22 +251,39 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                     <Menu className="w-5 h-5 text-brandWhite" />
                   </button>
                   
-                  {/* Desktop Spotify-like Navigation Arrows */}
-                  <div className="hidden md:flex items-center gap-2">
-                    <button 
-                      onClick={() => router.back()}
-                      className="p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-brandWhite/70 hover:text-brandWhite transition-all active:scale-95"
-                      title="Go Back"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => router.forward()}
-                      className="p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-brandWhite/70 hover:text-brandWhite transition-all active:scale-95"
-                      title="Go Forward"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
+                  {/* Desktop Spotify-like Navigation Arrows & Header Search Bar */}
+                  <div className="hidden md:flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => router.back()}
+                        className="p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-brandWhite/70 hover:text-brandWhite transition-all active:scale-95"
+                        title="Go Back"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => router.forward()}
+                        className="p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-brandWhite/70 hover:text-brandWhite transition-all active:scale-95"
+                        title="Go Forward"
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {/* Search Bar beside arrows */}
+                    <div className="relative flex items-center">
+                      <Search className="w-4 h-4 text-brandMuted absolute left-3 pointer-events-none" />
+                      <input
+                        type="text"
+                        placeholder="What do you want to play?"
+                        onChange={(e) => {
+                          if (e.target.value.trim()) {
+                            router.push(`/search?q=${encodeURIComponent(e.target.value)}`);
+                          }
+                        }}
+                        className="bg-[#242424] hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] text-white text-xs font-semibold rounded-full pl-9 pr-4 py-2 w-48 sm:w-64 border border-white/10 focus:border-spotifyGreen outline-none transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -280,14 +297,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 <div className="flex items-center gap-4">
                   <button onClick={handleInstall} className="hidden sm:flex items-center gap-2 bg-[#1DB954]/10 hover:bg-[#1DB954]/20 text-spotifyGreen px-3 py-1.5 rounded-full text-xs font-bold transition-all border border-spotifyGreen/20">
                     Download App
-                  </button>
-                  <button
-                    onClick={() => dispatch(toggleNowPlaying())}
-                    className="flex items-center gap-2 p-2 rounded-full hover:bg-[#282828] transition-all text-brandWhite active:scale-95"
-                    title="Toggle Now Playing Panel"
-                  >
-                    <span className="text-xs font-semibold text-brandMuted hover:text-brandWhite hidden sm:inline">Now Playing</span>
-                    <Disc className={`w-5 h-5 ${isPlaying ? 'animate-spin-slow text-spotifyGreen' : 'text-brandWhite'}`} />
                   </button>
                 </div>
               </header>
